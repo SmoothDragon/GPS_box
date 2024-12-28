@@ -17,6 +17,7 @@ if __name__ == '__main__':
     w_wall_box =2
     h_wall_post = 10
     h_wall_box = 20
+    h_wall_hole = 5
     w_base = 50
     w_sma = (56-31)/95*1.7*25.4
     offset_sma = (31)/95*1.7*25.4
@@ -30,15 +31,15 @@ if __name__ == '__main__':
     # Lower mount
     box = sd.cube( [w_base, w_base, h_wall_box] )
     box -= sd.translate([w_wall_box,w_wall_box,w_wall_box])(sd.cube( [w_base-2*w_wall_box, w_base-2*w_wall_box, h_wall_box] ))
-    box -= sd.translate([offset_sma,-w_wall_box,w_wall_box])(sd.cube([w_sma, 3*w_wall_box, h_wall_box]))
+    box -= sd.translate([offset_sma,-w_wall_box,h_wall_hole])(sd.cube([w_sma, 3*w_wall_box, h_wall_box]))
     box = sd.translate([-w_base/2, -w_base/2,0])(box)
     box = sd.rotate([0,0,-90])(box)
     box = sd.translate([w_base/2, w_base/2,0])(box)
-    box -= sd.translate([offset_wire_hole,-w_wall_box,w_wall_box])(sd.cube([w_wire_hole, 3*w_wall_box, h_wall_box]))
+    box -= sd.translate([offset_wire_hole,-w_wall_box,h_wall_hole])(sd.cube([w_wire_hole, 3*w_wall_box, h_wall_box]))
     box = sd.translate([-w_base/2, -w_base/2,0])(box)
     box = sd.rotate([0,0,-90])(box)
     box = sd.translate([w_base/2, w_base/2,0])(box)
-    box -= sd.translate([offset_usb_hole,-w_wall_box,w_wall_box])(sd.cube([w_usb_hole, 3*w_wall_box, h_wall_box]))
+    box -= sd.translate([offset_usb_hole,-w_wall_box,h_wall_hole])(sd.cube([w_usb_hole, 3*w_wall_box, h_wall_box]))
     post = sd.cylinder(d=2*w_wall_post+id_M2, h=h_wall_post)
     post -= sd.translate([0,0,w_wall_box])(sd.cylinder(d=id_M2, h=h_wall_post))
     post = sd.translate([w_mount/2, w_mount/2, 0])(post)
