@@ -24,8 +24,10 @@ if __name__ == '__main__':
     offset_wire_hole = (15)/95*1.7*25.4
     w_usb_hole = (85-15)/95*1.7*25.4
     offset_usb_hole = (15)/95*1.7*25.4
+    h_pcb = 0.062*25.4
+    h_lid_post = h_wall_box - h_wall_post - h_pcb
 
-
+    # Lower mount
     box = sd.cube( [w_base, w_base, h_wall_box] )
     box -= sd.translate([w_wall_box,w_wall_box,w_wall_box])(sd.cube( [w_base-2*w_wall_box, w_base-2*w_wall_box, h_wall_box] ))
     box -= sd.translate([offset_sma,-w_wall_box,w_wall_box])(sd.cube([w_sma, 3*w_wall_box, h_wall_box]))
@@ -42,8 +44,22 @@ if __name__ == '__main__':
     post = sd.translate([w_mount/2, w_mount/2, 0])(post)
     posts = sd.union()(*[sd.rotate([0,0,i*90])(post) for i in range(4)])
     box = sd.translate([-w_base/2, -w_base/2,0])(box)
+    lower = box + posts
 
-    final = box + posts
+    # Upper lid
+    lid = sd.translate([w_wall_box,w_wall_box,0])(sd.cube( [w_base-2*w_wall_box, w_base-2*w_wall_box, w_wall_box] ))
+    post = sd.cylinder(d=2*w_wall_post+id_M2, h=h_lid_post)
+    post = sd.translate([w_mount/2, w_mount/2, 0])(post)
+    posts = sd.union()(*[sd.rotate([0,0,i*90])(post) for i in range(4)])
+    lid = sd.translate([-w_base/2, -w_base/2,0])(lid)
+    upper = lid + posts
+    post_hole = sd.translate([0,0,-w_wall_box])(sd.cylinder(d=od_M2, h=2*h_lid_post))
+    post_hole = sd.translate([w_mount/2, w_mount/2, 0])(post_hole)
+    post_holes = sd.union()(*[sd.rotate([0,0,i*90])(post_hole) for i in range(4)])
+    upper -= post_holes
+    upper = sd.translate([w_wall_box+ w_base,0,0])(upper)
+
+    final = lower + upper
     fn = 256
     final = sd.scad_render(final, file_header=f'$fn={fn};')
     print(final)
